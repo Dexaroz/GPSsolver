@@ -111,12 +111,15 @@ def graph_search(problem, fringe):
     If two paths reach a state, only use the best one. [Fig. 3.18]"""
     closed = {}
     fringe.append(Node(problem.initial))
-    nodes_generated = 0
+    nodes_generated = 1
+    nodes_visited = 0
     while fringe:
         node = fringe.pop()
+        nodes_visited += 1
+
         if problem.goal_test(node.state):
             node.nodes_generated = nodes_generated
-            node.nodes_visited = len(closed)
+            node.nodes_visited = nodes_visited
             return node
 
         if node.state not in closed:
@@ -124,8 +127,8 @@ def graph_search(problem, fringe):
             neighbors, number_neighbors = node.expand(problem)
             fringe.extend(neighbors)
             nodes_generated += number_neighbors
-            node.nodes_generated = nodes_generated
-            node.nodes_visited = len(closed)
+            node.nodes_generated = nodes_generated # Mode extended
+            node.nodes_visited = nodes_visited # Mode extended
 
     return None
 
