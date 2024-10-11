@@ -77,13 +77,21 @@ class Node:
     def __repr__(self):
         return "<Node %s>" % (self.state,)
 
-    def path(self):
+    def path(self, mode_extended=False):
         """Create a list of nodes from the root to this node."""
         x, result = self, [self]
-        print(f"Nodes generated = {x.nodes_generated} \nNodes visited = {x.nodes_visited}")
+        last = True
+
         while x.parent:
+            if mode_extended or last:
+                print(f"Nodes generated = {x.nodes_generated} \nNodes visited = {x.nodes_visited}")
+                last = False
+
             result.append(x.parent)
             x = x.parent
+
+        if mode_extended:
+            print(f"Nodes generated = {x.nodes_generated} \nNodes visited = {x.nodes_visited}")
         return result
 
     def expand(self, problem):
@@ -110,12 +118,15 @@ def graph_search(problem, fringe):
             node.nodes_generated = nodes_generated
             node.nodes_visited = len(closed)
             return node
+
         if node.state not in closed:
             closed[node.state] = True
             neighbors, number_neighbors = node.expand(problem)
             fringe.extend(neighbors)
-            print(neighbor for neighbor in neighbors)
             nodes_generated += number_neighbors
+            node.nodes_generated = nodes_generated
+            node.nodes_visited = len(closed)
+
     return None
 
 
