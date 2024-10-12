@@ -75,7 +75,7 @@ class Node:
         self.nodes_visited = 0
 
     def __repr__(self):
-        return "<Node %s>" % (self.state,)
+        return "<Node %s | %s>" % (self.state, self.path_cost)
 
     def path(self, mode_extended=False):
         """Create a list of nodes from the root to this node."""
@@ -84,14 +84,14 @@ class Node:
 
         while x.parent:
             if mode_extended or last:
-                print(f"Nodes generated = {x.nodes_generated} \nNodes visited = {x.nodes_visited}")
+                print(f"Nodes generated = {x.nodes_generated}\nNodes visited = {x.nodes_visited}")
                 last = False
 
             result.append(x.parent)
             x = x.parent
 
         if mode_extended:
-            print(f"Nodes generated = {x.nodes_generated} \nNodes visited = {x.nodes_visited}")
+            print(f"Nodes generated = {x.nodes_generated}\nNodes visited = {x.nodes_visited}")
         return result
 
     def expand(self, problem):
@@ -141,6 +141,10 @@ def breadth_first_graph_search(problem):
 def depth_first_graph_search(problem):
     """Search the deepest nodes in the search tree first. [p 74]"""
     return graph_search(problem, Stack())
+
+def branch_and_bound_search(problem, cuality=False):
+    """Search the optimal path without subestimation."""
+    return graph_search(problem, PriorityQueue(cuality))
 
 
 

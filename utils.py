@@ -543,6 +543,51 @@ class FIFOQueue(Queue):
             self.start = 0
         return e
 
+    def __repr__(self):
+        primary_queue = "["
+        for item in self.A:
+            primary_queue += str(item) + ", "
+
+        return primary_queue[:-2] + "]"
+
+class PriorityQueue(): # Improve impletation
+    """A Priority Queue."""
+
+    def __init__(self, cuality=False):
+        self.A = []
+        self.start = 0
+        self.cuality = cuality
+
+    def append(self, item):
+        self.A.append(item)
+        if self.cuality:
+            self.A.sort(key=lambda x : x.path_cost, reverse=True)
+        else:
+            self.A.sort(key=lambda x : x.path_cost, reverse=False)
+
+    def __len__(self):
+        return len(self.A) - self.start
+
+    def extend(self, items):
+        for item in items:
+            self.append(item)
+
+
+    def pop(self):
+        e = self.A[self.start]
+        self.start += 1
+        if self.start > 5 and self.start > len(self.A) / 2:
+            self.A = self.A[self.start:]
+            self.start = 0
+        return e
+
+    def __repr__(self):
+        primary_queue = "["
+        for item in self.A:
+            primary_queue += str(item) + ", "
+
+        return primary_queue[:-2] + "]"
+
 
 
 ## Fig: The idea is we can define things like Fig[3,10] later.
