@@ -2,6 +2,7 @@
 #______________________________________________________________________________
 # Simple Data Structures: infinity, Dict, Struct
 
+import heapq
 infinity = 1.0e400
 
 
@@ -554,32 +555,27 @@ class PriorityQueue(): # Improve impletation
     """A Priority Queue."""
 
     def __init__(self, cuality=False):
-        self.A = []
-        self.start = 0
+        self.heap = []
         self.cuality = cuality
 
     def append(self, item):
-        self.A.append(item)
         if self.cuality:
-            self.A.sort(key=lambda x : x.path_cost, reverse=True)
+            heapq.heappush(self.heap, (-item.path_cost, item))
         else:
-            self.A.sort(key=lambda x : x.path_cost, reverse=False)
-
+            heapq.heappush(self.heap, (item.path_cost, item))
     def __len__(self):
-        return len(self.A) - self.start
+        return len(self.heap)
 
     def extend(self, items):
         for item in items:
-            self.append(item)
+            if self.cuality:
+                heapq.heappush(self.heap, (-item.path_cost, item))
+            else:
+                heapq.heappush(self.heap, (item.path_cost, item))
 
 
     def pop(self):
-        e = self.A[self.start]
-        self.start += 1
-        if self.start > 5 and self.start > len(self.A) / 2:
-            self.A = self.A[self.start:]
-            self.start = 0
-        return e
+        return heapq.heappop(self.heap)[1]
 
     def __repr__(self):
         primary_queue = "["
