@@ -1,7 +1,6 @@
 # Search methods
 
 import search
-import time
 
 ab = search.GPSProblem('A', 'B'
                        , search.romania)

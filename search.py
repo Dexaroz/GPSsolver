@@ -8,6 +8,7 @@ functions."""
 from utils import *
 import random
 import sys
+import time
 
 
 # ______________________________________________________________________________
@@ -73,6 +74,7 @@ class Node:
             self.depth = parent.depth + 1
         self.nodes_generated = 0
         self.nodes_visited = 0
+        self.time = 0
 
     def __repr__(self):
         return "<Node %s | %s>" % (self.state, self.path_cost)
@@ -81,6 +83,7 @@ class Node:
         """Create a list of nodes from the root to this node."""
         x, result = self, [self]
         last = True
+        print(f"Nanoseconds: {x.time}")
 
         while x.parent:
             if mode_extended or last:
@@ -109,6 +112,7 @@ def graph_search(problem, fringe):
     """Search through the successors of a problem to find a goal.
     The argument fringe should be an empty queue.
     If two paths reach a state, only use the best one. [Fig. 3.18]"""
+    start_time = time.perf_counter_ns()
     closed = {}
     fringe.append(Node(problem.initial))
     nodes_generated = 1
@@ -120,6 +124,7 @@ def graph_search(problem, fringe):
         if problem.goal_test(node.state):
             node.nodes_generated = nodes_generated
             node.nodes_visited = nodes_visited
+            node.time = (time.perf_counter_ns() - start_time) / 1000000
             return node
 
         if node.state not in closed:
